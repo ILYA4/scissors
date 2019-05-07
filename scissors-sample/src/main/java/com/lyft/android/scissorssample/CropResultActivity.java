@@ -19,7 +19,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
@@ -29,7 +29,7 @@ public class CropResultActivity extends Activity {
 
     private static final String EXTRA_FILE_PATH = "EXTRA_FILE_PATH";
 
-    @Bind(R.id.result_image)
+    @BindView(R.id.result_image)
     ImageView resultView;
 
     @Override

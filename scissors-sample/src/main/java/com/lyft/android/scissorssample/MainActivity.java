@@ -28,7 +28,8 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
-import butterknife.Bind;
+import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
@@ -50,13 +51,13 @@ public class MainActivity extends Activity {
 
     private static final String[] ASPECT_LABELS = { "\u00D8", "1:1", "6:4", "16:9" };
 
-    @Bind(R.id.crop_view)
+    @BindView(R.id.crop_view)
     CropView cropView;
 
-    @Bind({ R.id.crop_fab, R.id.pick_mini_fab, R.id.ratio_fab })
+    @BindViews({ R.id.crop_fab, R.id.pick_mini_fab, R.id.ratio_fab })
     List<View> buttons;
 
-    @Bind(R.id.pick_fab)
+    @BindView(R.id.pick_fab)
     View pickButton;
 
     CompositeSubscription subscriptions = new CompositeSubscription();
