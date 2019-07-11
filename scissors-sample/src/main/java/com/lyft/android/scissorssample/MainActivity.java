@@ -33,17 +33,19 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
+import butterknife.Setter;
+import butterknife.ViewCollections;
+import io.reactivex.Observable;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
+
 import com.lyft.android.scissors2.CropView;
 import com.squareup.leakcanary.RefWatcher;
 import java.io.File;
 import java.util.List;
-import rx.Observable;
-import rx.functions.Action1;
-import rx.subscriptions.CompositeSubscription;
 
 import static android.graphics.Bitmap.CompressFormat.JPEG;
-import static rx.android.schedulers.AndroidSchedulers.mainThread;
-import static rx.schedulers.Schedulers.io;
+import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 
 public class MainActivity extends Activity {
 
@@ -60,18 +62,18 @@ public class MainActivity extends Activity {
     @BindView(R.id.pick_fab)
     View pickButton;
 
-    CompositeSubscription subscriptions = new CompositeSubscription();
+    CompositeDisposable subscriptions = new CompositeDisposable();
 
     private int selectedRatio = 0;
     private AnimatorListener animatorListener = new AnimatorListener() {
         @Override
         public void onAnimationStart(Animator animation) {
-            ButterKnife.apply(buttons, VISIBILITY, View.INVISIBLE);
+            ViewCollections.set(buttons, VISIBILITY, View.INVISIBLE);
         }
 
         @Override
         public void onAnimationEnd(Animator animation) {
-            ButterKnife.apply(buttons, VISIBILITY, View.VISIBLE);
+            ViewCollections.set(buttons, VISIBILITY, View.VISIBLE);
         }
 
         @Override
@@ -112,21 +114,16 @@ public class MainActivity extends Activity {
     public void onCropClicked() {
         final File croppedFile = new File(getCacheDir(), "cropped.jpg");
 
-        Observable<Void> onSave = Observable.from(cropView.extensions()
+        Observable<Integer> onSave = Observable.fromFuture(cropView.extensions()
                 .crop()
                 .quality(100)
                 .format(JPEG)
                 .into(croppedFile))
-                .subscribeOn(io())
+                .subscribeOn(Schedulers.io())
                 .observeOn(mainThread());
 
         subscriptions.add(onSave
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void nothing) {
-                        CropResultActivity.startUsing(croppedFile, MainActivity.this);
-                    }
-                }));
+                .subscribe(nothing -> CropResultActivity.startUsing(croppedFile, MainActivity.this)));
     }
 
     @OnClick({ R.id.pick_fab, R.id.pick_mini_fab })
@@ -160,7 +157,7 @@ public class MainActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
 
-        subscriptions.unsubscribe();
+        subscriptions.dispose();
 
         RefWatcher refWatcher = App.getRefWatcher(this);
         refWatcher.watch(this, "MainActivity");
@@ -176,26 +173,21 @@ public class MainActivity extends Activity {
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
-                ButterKnife.apply(buttons, VISIBILITY, View.INVISIBLE);
+                ViewCollections.set(buttons, VISIBILITY, View.INVISIBLE);
                 break;
             default:
-                ButterKnife.apply(buttons, VISIBILITY, View.VISIBLE);
+                ViewCollections.set(buttons, VISIBILITY, View.VISIBLE);
                 break;
         }
         return true;
     }
 
     private void updateButtons() {
-        ButterKnife.apply(buttons, VISIBILITY, View.VISIBLE);
+        ViewCollections.set(buttons, VISIBILITY, View.VISIBLE);
         pickButton.setVisibility(View.GONE);
     }
 
-    static final ButterKnife.Setter<View, Integer> VISIBILITY = new ButterKnife.Setter<View, Integer>() {
-        @Override
-        public void set(final View view, final Integer visibility, int index) {
-            view.setVisibility(visibility);
-        }
-    };
+    static final Setter<View, Integer> VISIBILITY = (view, visibility, index) -> view.setVisibility(visibility);
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     static void autoCancel(ObjectAnimator objectAnimator) {

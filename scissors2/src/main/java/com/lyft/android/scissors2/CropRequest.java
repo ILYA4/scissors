@@ -1,7 +1,8 @@
 package com.lyft.android.scissors2;
 
 import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import java.io.File;
 import java.io.OutputStream;
@@ -47,7 +48,7 @@ public class CropRequest {
    * @param file Must have permissions to write, will be created if doesn't exist or overwrite if it does.
    * @return {@link Future} used to cancel or wait for this request.
    */
-  public Future<Void> into(@NonNull File file) {
+  public Future<Integer> into(@NonNull File file) {
     final Bitmap croppedBitmap = cropView.crop();
     return Utils.flushToFile(croppedBitmap, format, quality, file);
   }
@@ -59,7 +60,7 @@ public class CropRequest {
    * @param closeWhenDone wetter or not to close provided stream once flushing is done
    * @return {@link Future} used to cancel or wait for this request.
    */
-  public Future<Void> into(@NonNull OutputStream outputStream, boolean closeWhenDone) {
+  public Future<Integer> into(@NonNull OutputStream outputStream, boolean closeWhenDone) {
     final Bitmap croppedBitmap = cropView.crop();
     return Utils.flushToStream(croppedBitmap, format, quality, outputStream, closeWhenDone);
   }
