@@ -275,6 +275,7 @@ class TouchManager {
         float newY = position.getY();
         int bottom = imageBounds.bottom;
 
+        int bottomPadding = cropViewConfig.getViewportOverlayBottomPadding();
 
         if (bottom - newY >= verticalLimit) {
             newY = bottom - verticalLimit;

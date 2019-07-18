@@ -6,7 +6,8 @@
         <!-- Viewport overlay color -->
         <attr name="cropviewViewportOverlayColor" format="color" />
         <!-- Viewport overlay padding -->
-        <attr name="cropviewViewportOverlayPadding" format="dimension" />
+        <attr name="cropviewViewportPadding" format="dimension" />
+        <attr name="cropviewViewportBottomPadding" format="dimension"/>
         <!-- Maximum zoom level -->
         <attr name="cropviewMaxScale" format="float" />
         <!-- Minimum  zoom level -->

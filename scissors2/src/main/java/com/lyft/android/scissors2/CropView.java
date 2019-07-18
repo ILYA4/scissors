@@ -335,9 +335,11 @@ public class CropView extends ImageView {
 
         final Bitmap dst = Bitmap.createBitmap(viewportWidth, viewportHeight, config);
 
+        int bottomPadding = this.config.getViewportOverlayBottomPadding();
+
         Canvas canvas = new Canvas(dst);
         final int left = (getRight() - getLeft() - viewportWidth) / 2;
-        final int top = (getBottom() - getTop() - viewportHeight) / 2;
+        final int top = (getBottom() - getTop()  - viewportHeight) / 2;
         canvas.translate(-left, -top);
 
         drawBitmap(canvas);
