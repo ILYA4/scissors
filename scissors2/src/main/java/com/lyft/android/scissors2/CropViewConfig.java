@@ -28,12 +28,23 @@ class CropViewConfig {
     public static final int DEFAULT_VIEWPORT_OVERLAY_PADDING = 0;
     public static final int DEFAULT_VIEWPORT_OVERLAY_COLOR = 0xC8000000; // Black with 200 alpha
     public static final int DEFAULT_SHAPE = CropView.Shape.RECTANGLE;
+    public static final boolean DEFAULT_GRID_ENABLE = false;
+    public static final int DEFAULT_GRID_COLUMNS = 3;
+    public static final int DEFAULT_GRID_LINES = 3;
+    public static final int DEFAULT_GRID_COLOR = 0xFFFFFFFF;
+    public static final int DEFAULT_GRID_OUTLINE_COLOR =  0x80FFFFFF;
 
     private float viewportRatio = DEFAULT_VIEWPORT_RATIO;
     private float maxScale = DEFAULT_MAXIMUM_SCALE;
     private float minScale = DEFAULT_MINIMUM_SCALE;
     private int viewportOverlayPadding = DEFAULT_VIEWPORT_OVERLAY_PADDING;
     private int viewportOverlayColor = DEFAULT_VIEWPORT_OVERLAY_COLOR;
+    private boolean gridEnable = DEFAULT_GRID_ENABLE;
+    private int gridColumns = DEFAULT_GRID_COLUMNS;
+    private int gridLines = DEFAULT_GRID_LINES;
+    private int gridColor = DEFAULT_GRID_COLOR;
+    private int gridOutlineColor = DEFAULT_GRID_OUTLINE_COLOR;
+
     private @CropView.Shape int shape = DEFAULT_SHAPE;
 
     public int getViewportOverlayColor() {
@@ -76,6 +87,46 @@ class CropViewConfig {
         this.minScale = minScale <= 0 ? DEFAULT_MINIMUM_SCALE : minScale;
     }
 
+    public boolean isGridEnable() {
+        return gridEnable;
+    }
+
+    public void setGridEnable(boolean gridEnable) {
+        this.gridEnable = gridEnable;
+    }
+
+    public int getGridColumns() {
+        return gridColumns;
+    }
+
+    public void setGridColumns(int gridColumns) {
+        this.gridColumns = gridColumns;
+    }
+
+    public int getGridLines() {
+        return gridLines;
+    }
+
+    public void setGridLines(int gridLines) {
+        this.gridLines = gridLines;
+    }
+
+    public int getGridColor() {
+        return gridColor;
+    }
+
+    public void setGridColor(int gridColor) {
+        this.gridColor = gridColor;
+    }
+
+    public int getGridOutlineColor() {
+        return gridOutlineColor;
+    }
+
+    public void setGridOutlineColor(int gridOutlineColor) {
+        this.gridOutlineColor = gridOutlineColor;
+    }
+
     public @CropView.Shape int shape() {
         return shape;
     }
@@ -114,6 +165,26 @@ class CropViewConfig {
         cropViewConfig.setViewportOverlayPadding(
             attributes.getDimensionPixelSize(R.styleable.CropView_cropviewViewportOverlayPadding,
                 CropViewConfig.DEFAULT_VIEWPORT_OVERLAY_PADDING));
+
+        cropViewConfig.setGridEnable(
+                attributes.getBoolean(R.styleable.CropView_cropviewGridEnable,
+                        DEFAULT_GRID_ENABLE));
+
+        cropViewConfig.setGridColumns(
+                attributes.getInt(R.styleable.CropView_cropviewGridColumns,
+                        DEFAULT_GRID_COLUMNS));
+
+        cropViewConfig.setGridLines(
+                attributes.getInt(R.styleable.CropView_cropviewGridLines,
+                        DEFAULT_GRID_LINES));
+
+        cropViewConfig.setGridColor(
+                attributes.getColor(R.styleable.CropView_cropviewGridColor,
+                        DEFAULT_GRID_COLOR));
+
+        cropViewConfig.setGridOutlineColor(
+                attributes.getColor(R.styleable.CropView_cropviewOutlineColor,
+                        DEFAULT_GRID_OUTLINE_COLOR));
 
         @CropView.Shape int shape = attributes.getInt(
                 R.styleable.CropView_cropviewShape, CropViewConfig.DEFAULT_SHAPE);

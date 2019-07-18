@@ -54,6 +54,8 @@ public class CropView extends ImageView {
 
     private Paint viewportPaint = new Paint();
     private Paint bitmapPaint = new Paint();
+    private Paint linePaint = new Paint();
+    private Paint gridPaint = new Paint();
 
     private Bitmap bitmap;
     private Matrix transform = new Matrix();
@@ -130,6 +132,43 @@ public class CropView extends ImageView {
         canvas.drawRect(0, 0, getWidth(), top, viewportPaint); // top
         canvas.drawRect(getWidth() - left, top, getWidth(), getHeight() - top, viewportPaint); // right
         canvas.drawRect(0, getHeight() - top, getWidth(), getHeight(), viewportPaint); // bottom
+
+        drawGrid(canvas);
+    }
+
+    private void drawGrid(Canvas canvas) {
+        final int viewportWidth = touchManager.getViewportWidth();
+        final int viewportHeight = touchManager.getViewportHeight();
+        final int left = (getWidth() - viewportWidth) / 2;
+        final int top = (getHeight() - viewportHeight) / 2;
+        final int right = getWidth() - left;
+        final int bottom = getHeight() - top;
+
+        if (config.isGridEnable()) {
+
+            linePaint.setColor(config.getGridColor());
+            linePaint.setStrokeWidth(4.0f);
+
+            canvas.drawLine(left, top, left, bottom, linePaint); //left
+            canvas.drawLine(left, top, right, top, linePaint); // top
+            canvas.drawLine(right, top, right, bottom, linePaint); // right
+            canvas.drawLine(left, bottom, right, bottom, linePaint); // bottom
+
+            gridPaint.setColor(config.getGridOutlineColor());
+            gridPaint.setStrokeWidth(1.0f);
+
+            final int widthGrid = viewportWidth / config.getGridColumns();
+            final int heightGrid = viewportHeight / config.getGridLines();
+
+            // draw vertical lines
+            for (int i = 1; i < config.getGridColumns(); i++) {
+                canvas.drawLine(left + widthGrid * i, top, left + widthGrid * i, bottom, gridPaint);
+            }
+
+            for (int i = 1; i < config.getGridLines(); i++) {
+                canvas.drawLine(left, top + heightGrid * i, right, top + heightGrid * i, gridPaint);
+            }
+        }
     }
 
     private void drawOvalOverlay(Canvas canvas) {

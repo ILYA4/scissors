@@ -16,5 +16,10 @@
             <enum name="rectangle" value="0" />
             <enum name="oval" value="1" />
         </attr>
+        <attr name="cropviewGridEnable" format="boolean"/>
+        <attr name="cropviewGridColumns" format="integer"/>
+        <attr name="cropviewGridLines" format="integer"/>
+        <attr name="cropviewOutlineColor" format="color"/>
+        <attr name="cropviewGridColor" format="color"/>
     </declare-styleable>
 </resources>
