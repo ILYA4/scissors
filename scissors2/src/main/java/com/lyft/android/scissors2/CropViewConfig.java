@@ -33,6 +33,7 @@ class CropViewConfig {
     public static final int DEFAULT_GRID_LINES = 3;
     public static final int DEFAULT_GRID_COLOR = 0xFFFFFFFF;
     public static final int DEFAULT_GRID_OUTLINE_COLOR =  0x80FFFFFF;
+    public static final float DEFAULT_RADIUS_CORNERS = 0f;
 
     private float viewportRatio = DEFAULT_VIEWPORT_RATIO;
     private float maxScale = DEFAULT_MAXIMUM_SCALE;
@@ -44,6 +45,7 @@ class CropViewConfig {
     private int gridLines = DEFAULT_GRID_LINES;
     private int gridColor = DEFAULT_GRID_COLOR;
     private int gridOutlineColor = DEFAULT_GRID_OUTLINE_COLOR;
+    private float radiusCorners = DEFAULT_RADIUS_CORNERS;
 
     private @CropView.Shape int shape = DEFAULT_SHAPE;
 
@@ -127,6 +129,14 @@ class CropViewConfig {
         this.gridOutlineColor = gridOutlineColor;
     }
 
+    public float getRadiusCorners() {
+        return radiusCorners;
+    }
+
+    public void setRadiusCorners(float radiusCorners) {
+        this.radiusCorners = radiusCorners;
+    }
+
     public @CropView.Shape int shape() {
         return shape;
     }
@@ -185,6 +195,10 @@ class CropViewConfig {
         cropViewConfig.setGridOutlineColor(
                 attributes.getColor(R.styleable.CropView_cropviewOutlineColor,
                         DEFAULT_GRID_OUTLINE_COLOR));
+
+        cropViewConfig.setRadiusCorners(
+                attributes.getDimension(R.styleable.CropView_cropviewRadiusCorners,
+                        DEFAULT_RADIUS_CORNERS));
 
         @CropView.Shape int shape = attributes.getInt(
                 R.styleable.CropView_cropviewShape, CropViewConfig.DEFAULT_SHAPE);

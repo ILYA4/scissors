@@ -15,10 +15,12 @@
  */
 package com.lyft.android.scissors2;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -121,5 +123,9 @@ class Utils {
         } catch (Exception e) {
             Log.e(TAG, "Error attempting to close stream.", e);
         }
+    }
+
+    public static float convertDpToPixel(float dp, Context context) {
+        return dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 }

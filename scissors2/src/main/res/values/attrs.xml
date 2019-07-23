@@ -21,5 +21,6 @@
         <attr name="cropviewGridLines" format="integer"/>
         <attr name="cropviewOutlineColor" format="color"/>
         <attr name="cropviewGridColor" format="color"/>
+        <attr name="cropviewRadiusCorners" format="dimension"/>
     </declare-styleable>
 </resources>

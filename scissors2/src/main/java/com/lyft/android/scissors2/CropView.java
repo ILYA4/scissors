@@ -134,6 +134,7 @@ public class CropView extends ImageView {
         canvas.drawRect(0, getHeight() - top, getWidth(), getHeight(), viewportPaint); // bottom
 
         drawGrid(canvas);
+        drawRoundedCorners(canvas);
     }
 
     private void drawGrid(Canvas canvas) {
@@ -149,10 +150,13 @@ public class CropView extends ImageView {
             linePaint.setColor(config.getGridColor());
             linePaint.setStrokeWidth(4.0f);
 
-            canvas.drawLine(left, top, left, bottom, linePaint); //left
-            canvas.drawLine(left, top, right, top, linePaint); // top
-            canvas.drawLine(right, top, right, bottom, linePaint); // right
-            canvas.drawLine(left, bottom, right, bottom, linePaint); // bottom
+           // float pixels = Utils.convertDpToPixel(16, getContext());
+            float pixels = config.getRadiusCorners();
+
+            canvas.drawLine(left, top + pixels, left, bottom - pixels, linePaint); //left
+            canvas.drawLine(left + pixels, top, right - pixels, top, linePaint); // top
+            canvas.drawLine(right, top + pixels, right, bottom - pixels, linePaint); // right
+            canvas.drawLine(left + pixels, bottom, right - pixels, bottom, linePaint); // bottom
 
             gridPaint.setColor(config.getGridOutlineColor());
             gridPaint.setStrokeWidth(1.0f);
@@ -169,6 +173,85 @@ public class CropView extends ImageView {
                 canvas.drawLine(left, top + heightGrid * i, right, top + heightGrid * i, gridPaint);
             }
         }
+    }
+
+    private void drawRoundedCorners(Canvas canvas) {
+        if (ovalRect == null) {
+            ovalRect = new RectF();
+        }
+        if (ovalPath == null) {
+            ovalPath = new Path();
+        }
+        linePaint.setStyle(Paint.Style.STROKE);
+
+        //float pixels = Utils.convertDpToPixel(32, getContext());
+        float pixels = config.getRadiusCorners() * 2;
+
+        final int viewportWidth = touchManager.getViewportWidth();
+        final int viewportHeight = touchManager.getViewportHeight();
+        final int left = (getWidth() - viewportWidth) / 2;
+        final int top = (getHeight() - viewportHeight) / 2;
+        final int right = getWidth() - left;
+        final int bottom = getHeight() - top;
+        ovalRect.left = left;
+        ovalRect.top = top;
+        ovalRect.right = left + pixels;
+        ovalRect.bottom = top + pixels;
+
+        // top left arc
+        ovalPath.reset();
+        ovalPath.moveTo(left, getHeight() / 2); // middle of the left side of the circle
+        ovalPath.arcTo(ovalRect, 180, 90, false); // draw arc to top
+        ovalPath.lineTo(left, top); // move to top-left corner
+        ovalPath.lineTo(left, getHeight() / 2); // move back to origin
+        ovalPath.close();
+        canvas.drawPath(ovalPath, viewportPaint);
+        canvas.drawArc(ovalRect, 180, 90, false, linePaint);
+
+        //top right arc
+        ovalRect.left = right - pixels;
+        ovalRect.top = top;
+        ovalRect.right = right;
+        ovalRect.bottom = top + pixels;
+
+        ovalPath.reset();
+        ovalPath.moveTo(getWidth() / 2, top); // middle of the top side of the circle
+        ovalPath.arcTo(ovalRect, 270, 90, false); // draw arc to the right
+        ovalPath.lineTo(right, top); // move to top-right corner
+        ovalPath.lineTo(getWidth() / 2, top); // move back to origin
+        ovalPath.close();
+        canvas.drawPath(ovalPath, viewportPaint);
+        canvas.drawArc(ovalRect, 270, 90, false, linePaint);
+
+        // bottom right arc
+        ovalRect.left = right - pixels;
+        ovalRect.top = bottom - pixels;
+        ovalRect.right = right;
+        ovalRect.bottom = bottom;
+
+        ovalPath.reset();
+        ovalPath.moveTo(right, getHeight() / 2); // middle of the right side of the circle
+        ovalPath.arcTo(ovalRect, 0, 90, false); // draw arc to the bottom
+        ovalPath.lineTo(right, bottom); // move to bottom-right corner
+        ovalPath.lineTo(right, getHeight() / 2); // move back to origin
+        ovalPath.close();
+        canvas.drawPath(ovalPath, viewportPaint);
+        canvas.drawArc(ovalRect, 0, 90, false, linePaint);
+
+        // bottom left arc
+        ovalRect.left = left;
+        ovalRect.top = bottom - pixels;
+        ovalRect.right = left + pixels;
+        ovalRect.bottom = bottom;
+
+        ovalPath.reset();
+        ovalPath.moveTo(getWidth() / 2, bottom); // middle of the bottom side of the circle
+        ovalPath.arcTo(ovalRect, 90, 90, false); // draw arc to the left
+        ovalPath.lineTo(left, bottom); // move to bottom-left corner
+        ovalPath.lineTo(getWidth() / 2, bottom); // move back to origin
+        ovalPath.close();
+        canvas.drawPath(ovalPath, viewportPaint);
+        canvas.drawArc(ovalRect, 90, 90, false, linePaint);
     }
 
     private void drawOvalOverlay(Canvas canvas) {
